@@ -76,7 +76,7 @@ int16_t lwActivate() {
   int16_t state = RADIOLIB_ERR_UNKNOWN;
 
   // setup the OTAA session information
-  node.beginOTAA(joinEUI, devEUI, nullptr, appKey);
+  node.beginOTAA(joinEUI, devEUI, nwkKey, appKey);
 
   Serial.println(F("Recalling LoRaWAN nonces & session"));
   // ##### setup the flash storage
@@ -187,7 +187,7 @@ void setup() {
   // this is the place to gather the sensor inputs
 
   // build uplinkPayload byte array
-  uint8_t uplinkPayload[] = {"RadioLIB: Hello, World!"};
+  uint8_t uplinkPayload[] = {"RadioLIB 1.1.0: Hello, World!"};
   
   uint8_t fPort = 1;
 
@@ -215,10 +215,10 @@ void setup() {
   debug((state < RADIOLIB_ERR_NONE) && (state != RADIOLIB_ERR_NONE), F("Error in sendReceive"), state, false); // This is correct
 
   if (state > 0) {
-    Serial.print(F("Downlink received:"));
+    Serial.println(F("Downlink received"));
     
     if(downlinkSize > 0) {
-      Serial.println(F("Downlink data: "));
+      Serial.print(F("[LoRaWAN] Payload:\t"));
       arrayDump(downlinkPayload, downlinkSize);
     } else {
       Serial.println(F("<MAC commands only>"));

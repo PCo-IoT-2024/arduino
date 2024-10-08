@@ -13,30 +13,17 @@ const uint32_t uplinkIntervalSeconds = 1UL * 60UL;    // minutes x seconds
 
 // The Device EUI & two keys can be generated on the TTN console 
 #ifndef RADIOLIB_LORAWAN_DEV_EUI   // Replace with your Device EUI
-#define RADIOLIB_LORAWAN_DEV_EUI   0x70B3D57ED006AF06
+#define RADIOLIB_LORAWAN_DEV_EUI   0x70B3D57ED006AF2B
 #endif
 #ifndef RADIOLIB_LORAWAN_APP_KEY   // Replace with your App Key
-// But the nwkKey is used in LoRaWAN < 1.1.0. In TTN it is wrongly called the appKey. Thus full the appKey from TTN
-#define RADIOLIB_LORAWAN_APP_KEY_MSB   0x9D, 0xAB, 0xD0, 0xC7, 0xE0, 0x82, 0xF2, 0x9A, 0xCD, 0xC7, 0x13, 0x8F, 0x17, 0xF8, 0x47, 0x64
-#define RADIOLIB_LORAWAN_APP_KEY_LSB   0x64, 0x47, 0xF8, 0x17, 0x8F, 0x13, 0xC7, 0xCD, 0x9A, 0xF2, 0x82, 0xE0, 0xC7, 0xD0, 0xAB, 0x9D
+#define RADIOLIB_LORAWAN_APP_KEY   0x26, 0xFD, 0x49, 0x41, 0x8E, 0xC9, 0xAC, 0xE9, 0x7A, 0xD8, 0xCE, 0x14, 0x83, 0xED, 0xD4, 0x00
 #endif
 #ifndef RADIOLIB_LORAWAN_NWK_KEY   // Put your Nwk Key here
-// But the nwkKey is used in LoRaWAN < 1.1.0. In TTN it is wrongly called the appKey. Thus full the appKey from TTN
-#define RADIOLIB_LORAWAN_NWK_KEY_MSB   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-#define RADIOLIB_LORAWAN_NWK_KEY_LSB   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-//#define RADIOLIB_LORAWAN_NWK_KEY   0x19, 0x93, 0xB1, 0x66, 0x4B, 0xA3, 0xB5, 0x44, 0xD5, 0x0B, 0x2E, 0x3D, 0xDE, 0x45, 0xD3, 0x61
+#define RADIOLIB_LORAWAN_NWK_KEY   0x65, 0xB5, 0x3D, 0xCD, 0xEC, 0xE6, 0xAC, 0x36, 0x73, 0xE8, 0x2B, 0x6A, 0xD6, 0xDA, 0x7D, 0x93
 #endif
-
-// TTN NwkKey msb
-// 0xFC, 0xDB, 0x27, 0x58, 0xC3, 0xC6, 0xD5, 0xC3, 0xA6, 0x46, 0x56, 0xB2, 0xC5, 0x8E, 0x6A, 0x46
-
-// TTN AppKey msb
-// 0x61, 0xD3, 0x45, 0xDE, 0x3D, 0x2E, 0x0B, 0xD5, 0x44, 0xB5, 0xA3, 0x4B, 0x66, 0xB1, 0x93, 0x19
-
 
 // For the curious, the #ifndef blocks allow for automated testing &/or you can
 // put your EUI & keys in to your platformio.ini - see wiki for more tips
-
 
 
 // Regional choices: EU868, US915, AU915, AS923, IN865, KR920, CN780, CN500
@@ -121,8 +108,8 @@ const uint8_t subBand = 0;  // For US915, change this to 2, otherwise leave on 0
 // Copy over the EUI's & keys in to the something that will not compile if incorrectly formatted
 uint64_t joinEUI =   RADIOLIB_LORAWAN_JOIN_EUI;
 uint64_t devEUI  =   RADIOLIB_LORAWAN_DEV_EUI;
-uint8_t appKey[] = { RADIOLIB_LORAWAN_APP_KEY_MSB };
-uint8_t nwkKey[] = { RADIOLIB_LORAWAN_NWK_KEY_MSB };
+uint8_t appKey[] = { RADIOLIB_LORAWAN_APP_KEY };
+uint8_t nwkKey[] = { RADIOLIB_LORAWAN_NWK_KEY };
 
 // Create the LoRaWAN node
 LoRaWANNode node(&radio, &Region, subBand);
@@ -142,9 +129,15 @@ void debug(bool isFail, const __FlashStringHelper* message, int state, bool Free
 // Helper function to display a byte array
 void arrayDump(uint8_t *buffer, uint16_t len) {
   for (uint16_t c = 0; c < len; c++) {
-    Serial.printf("%02X", buffer[c]);
+    Serial.printf("0x%02X ", buffer[c]);
   }
-  Serial.println();
+  Serial.print("-> ");
+
+  char str[len + 1];
+  str[len] = '\0';
+
+  snprintf(str, len + 1, "%s", buffer);
+  Serial.println(str);
 }
 
 
