@@ -11,7 +11,7 @@ void ledcAnalogWrite(uint8_t channel, uint32_t value, uint32_t valueMax = 255)
 }
 void setup() {
  ledcSetup(LEDC_CHANNEL_0, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
- ledcAttachPin(LED_PIN, LEDC_CHANNEL_0);
+ ledcAttach(LED_PIN, LEDC_CHANNEL_0);
 }
 void loop() {
  ledcAnalogWrite(LEDC_CHANNEL_0, brightness);
